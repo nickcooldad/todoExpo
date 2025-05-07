@@ -1,24 +1,28 @@
-// src/screens/TodoListScreen.jsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   View, 
   FlatList, 
   StyleSheet, 
   Alert
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useFocusEffect } from '@react-navigation/native';
 import TodoItem from '../components/TodoItem';
 import EmptyList from '../components/EmptyList';
 import FilterBar from '../components/FilterBar';
 import AddButton from '../components/AddButton';
 import { getAllTodos, deleteTodo, toggleTodoCompleted } from '../storage/todoStorage';
+import { Todo, RootStackParamList, FilterType } from '../types';
 
-const TodoListScreen = ({ navigation }) => {
-  const [todos, setTodos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+type TodoListScreenProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'TodoList'>;
+};
 
-  // Загрузка задач
+const TodoListScreen: React.FC<TodoListScreenProps> = ({ navigation }) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [filter, setFilter] = useState<FilterType>('all');
+
   const loadTodos = useCallback(async () => {
     try {
       setLoading(true);
@@ -32,20 +36,19 @@ const TodoListScreen = ({ navigation }) => {
     }
   }, []);
 
-  // Обновление при фокусе на экране (возврат с других экранов)
+
   useFocusEffect(
     useCallback(() => {
       loadTodos();
     }, [loadTodos])
   );
 
-  // Редактирование задачи
-  const handleEditTodo = (todo) => {
+
+  const handleEditTodo = (todo: Todo) => {
     navigation.navigate('EditTodo', { todo });
   };
 
-  // Удаление задачи
-  const handleDeleteTodo = (id) => {
+  const handleDeleteTodo = (id: string) => {
     Alert.alert(
       'Подтверждение',
       'Вы уверены, что хотите удалить эту задачу?',
@@ -68,8 +71,8 @@ const TodoListScreen = ({ navigation }) => {
     );
   };
 
-  // Переключение статуса выполнения задачи
-  const handleToggleComplete = async (id) => {
+
+  const handleToggleComplete = async (id: string) => {
     try {
       await toggleTodoCompleted(id);
       loadTodos();
@@ -79,17 +82,16 @@ const TodoListScreen = ({ navigation }) => {
     }
   };
 
-  // Добавление задачи
+
   const handleAddTodo = () => {
     navigation.navigate('AddTodo');
   };
 
-  // Обработка изменения фильтра
-  const handleFilterChange = (newFilter) => {
+
+  const handleFilterChange = (newFilter: FilterType) => {
     setFilter(newFilter);
   };
 
-  // Фильтрация задач
   const filteredTodos = todos.filter(todo => {
     if (filter === 'active') return !todo.completed;
     if (filter === 'completed') return todo.completed;

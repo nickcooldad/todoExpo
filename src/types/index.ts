@@ -3,18 +3,18 @@ export interface Todo {
   title: string;
   description?: string;
   completed: boolean;
-  priority: 'low' | 'normal' | 'high';
-  dueDate?: string | null;
+  priority: Priority;
   createdAt: string;
   updatedAt?: string;
 }
+
+export type Priority = 'low' | 'normal' | 'high';
 
 export interface TodoInput {
   title: string;
   description?: string;
   completed?: boolean;
-  priority?: 'low' | 'normal' | 'high';
-  dueDate?: string | null;
+  priority?: Priority;
 }
 
 export type RootStackParamList = {
@@ -24,3 +24,5 @@ export type RootStackParamList = {
     todo: Todo;
   };
 };
+
+export type FilterType = 'all' | 'active' | 'completed';

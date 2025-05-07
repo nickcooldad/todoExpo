@@ -1,10 +1,15 @@
-// src/components/PrioritySelector.jsx
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Priority } from '../types';
 
-const PrioritySelector = ({ selectedValue, onSelect }) => {
+interface PrioritySelectorProps {
+  selectedValue: Priority;
+  onSelect: (value: Priority) => void;
+}
+
+const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedValue, onSelect }) => {
   // Функция для получения стиля выбранного приоритета
-  const getPriorityStyle = (value) => {
+  const getPriorityStyle = (value: Priority) => {
     if (value === 'low') return styles.lowPrioritySelected;
     if (value === 'normal') return styles.normalPrioritySelected;
     if (value === 'high') return styles.highPrioritySelected;
@@ -12,7 +17,7 @@ const PrioritySelector = ({ selectedValue, onSelect }) => {
   };
 
   // Компонент для кнопки выбора приоритета
-  const PriorityButton = ({ value, label }) => (
+  const PriorityButton = ({ value, label }: { value: Priority, label: string }) => (
     <TouchableOpacity
       style={[
         styles.priorityButton,

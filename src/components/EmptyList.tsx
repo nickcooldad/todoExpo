@@ -1,8 +1,11 @@
-// src/components/EmptyList.jsx
 import React from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
-const EmptyList = ({ loading }) => {
+interface EmptyListProps {
+  loading: boolean;
+}
+
+const EmptyList: React.FC<EmptyListProps> = ({ loading }) => {
   if (loading) {
     return (
       <View style={styles.emptyContainer}>

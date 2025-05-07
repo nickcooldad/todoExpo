@@ -1,8 +1,11 @@
-// src/components/AddButton.jsx
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const AddButton = ({ onPress }) => {
+interface AddButtonProps {
+  onPress: () => void;
+}
+
+const AddButton: React.FC<AddButtonProps> = ({ onPress }) => {
   return (
     <TouchableOpacity 
       style={styles.addButton}

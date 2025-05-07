@@ -1,4 +1,3 @@
-// src/screens/AddTodoScreen.jsx
 import React, { useState } from 'react';
 import { 
   View, 
@@ -11,16 +10,22 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import PrioritySelector from '../components/PrioritySelector';
 import { addTodo } from '../storage/todoStorage';
+import { RootStackParamList, Priority } from '../types';
 
-const AddTodoScreen = ({ navigation }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('normal'); // 'low', 'normal', 'high'
+type AddTodoScreenProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'AddTodo'>;
+};
+
+const AddTodoScreen: React.FC<AddTodoScreenProps> = ({ navigation }) => {
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [priority, setPriority] = useState<Priority>('normal');
 
   // Сохранение задачи
-  const handleSave = async () => {
+  const handleSave = async (): Promise<void> => {
     if (!title.trim()) {
       Alert.alert('Ошибка', 'Название задачи не может быть пустым');
       return;

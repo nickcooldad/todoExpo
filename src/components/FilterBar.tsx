@@ -1,8 +1,13 @@
-// src/components/FilterBar.jsx
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { FilterType } from '../types';
 
-const FilterBar = ({ currentFilter, onFilterChange }) => {
+interface FilterBarProps {
+  currentFilter: FilterType;
+  onFilterChange: (filter: FilterType) => void;
+}
+
+const FilterBar: React.FC<FilterBarProps> = ({ currentFilter, onFilterChange }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity

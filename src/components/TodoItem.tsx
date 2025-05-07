@@ -1,8 +1,20 @@
-// src/components/TodoItem.jsx
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Todo } from '../types';
 
-const TodoItem = ({ todo, onToggleComplete, onEdit, onDelete }) => {
+interface TodoItemProps {
+  todo: Todo;
+  onToggleComplete: (id: string) => void;
+  onEdit: (todo: Todo) => void;
+  onDelete: (id: string) => void;
+}
+
+const TodoItem: React.FC<TodoItemProps> = ({ 
+  todo, 
+  onToggleComplete, 
+  onEdit, 
+  onDelete 
+}) => {
   // Функция для получения стиля приоритета
   const getPriorityStyle = () => {
     if (todo.priority === 'low') return styles.lowPriority;

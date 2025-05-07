@@ -1,4 +1,3 @@
-// src/screens/EditTodoScreen.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   View, 
@@ -11,18 +10,25 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import PrioritySelector from '../components/PrioritySelector';
 import { updateTodo } from '../storage/todoStorage';
+import { RootStackParamList, Priority, Todo } from '../types';
 
-const EditTodoScreen = ({ route, navigation }) => {
+type EditTodoScreenProps = {
+  route: RouteProp<RootStackParamList, 'EditTodo'>;
+  navigation: StackNavigationProp<RootStackParamList, 'EditTodo'>;
+};
+
+const EditTodoScreen: React.FC<EditTodoScreenProps> = ({ route, navigation }) => {
   const { todo } = route.params;
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('normal');
-  const [completed, setCompleted] = useState(false);
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [priority, setPriority] = useState<Priority>('normal');
+  const [completed, setCompleted] = useState<boolean>(false);
 
-  // Инициализация данных из полученной задачи
   useEffect(() => {
     if (todo) {
       setTitle(todo.title || '');
@@ -32,8 +38,8 @@ const EditTodoScreen = ({ route, navigation }) => {
     }
   }, [todo]);
 
-  // Сохранение изменений
-  const handleSave = async () => {
+
+  const handleSave = async (): Promise<void> => {
     if (!title.trim()) {
       Alert.alert('Ошибка', 'Название задачи не может быть пустым');
       return;

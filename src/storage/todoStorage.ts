@@ -1,19 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Todo, TodoInput } from '../types';
 
-// Ключи для хранения данных
+
 const TODOS_KEY = 'todos';
 const STORAGE_VERSION_KEY = 'storage_version';
 const CURRENT_STORAGE_VERSION = '1.0'; // Версия схемы данных
 
-/**
- * Инициализация хранилища
- */
-export const initStorage = async () => {
+export const initStorage = async (): Promise<void> => {
   try {
-    // Проверяем существование хранилища
+
     const storedVersion = await AsyncStorage.getItem(STORAGE_VERSION_KEY);
     if (!storedVersion) {
-      // Первая установка - устанавливаем версию
       await AsyncStorage.setItem(STORAGE_VERSION_KEY, CURRENT_STORAGE_VERSION);
       await AsyncStorage.setItem(TODOS_KEY, JSON.stringify([]));
     }
@@ -22,10 +19,7 @@ export const initStorage = async () => {
   }
 };
 
-/**
- * Получить все задачи
- */
-export const getAllTodos = async () => {
+export const getAllTodos = async (): Promise<Todo[]> => {
   try {
     const todosString = await AsyncStorage.getItem(TODOS_KEY);
     return todosString ? JSON.parse(todosString) : [];
@@ -35,18 +29,15 @@ export const getAllTodos = async () => {
   }
 };
 
-/**
- * Добавить задачу
- */
-export const addTodo = async (todoInput) => {
+
+export const addTodo = async (todoInput: TodoInput): Promise<Todo | null> => {
   try {
     const todos = await getAllTodos();
-
-    // Создаем новую задачу с уникальным id
-    const newTodo = {
+    const newTodo: Todo = {
       ...todoInput,
       id: Date.now().toString(),
-      completed: false,
+      completed: todoInput.completed || false,
+      priority: todoInput.priority || 'normal',
       createdAt: new Date().toISOString(),
     };
 
@@ -59,10 +50,7 @@ export const addTodo = async (todoInput) => {
   }
 };
 
-/**
- * Обновить задачу
- */
-export const updateTodo = async (id, todoInput) => {
+export const updateTodo = async (id: string, todoInput: Partial<TodoInput>): Promise<Todo | null> => {
   try {
     const todos = await getAllTodos();
     const index = todos.findIndex(t => t.id === id);
@@ -84,10 +72,7 @@ export const updateTodo = async (id, todoInput) => {
   }
 };
 
-/**
- * Удалить задачу
- */
-export const deleteTodo = async (id) => {
+export const deleteTodo = async (id: string): Promise<boolean> => {
   try {
     const todos = await getAllTodos();
     const filteredTodos = todos.filter(todo => todo.id !== id);
@@ -99,10 +84,7 @@ export const deleteTodo = async (id) => {
   }
 };
 
-/**
- * Получить задачу по id
- */
-export const getTodoById = async (id) => {
+export const getTodoById = async (id: string): Promise<Todo | null> => {
   try {
     const todos = await getAllTodos();
     return todos.find(todo => todo.id === id) || null;
@@ -112,10 +94,7 @@ export const getTodoById = async (id) => {
   }
 };
 
-/**
- * Переключить статус выполнения задачи
- */
-export const toggleTodoCompleted = async (id) => {
+export const toggleTodoCompleted = async (id: string): Promise<Todo | null> => {
   try {
     const todos = await getAllTodos();
     const index = todos.findIndex(t => t.id === id);
